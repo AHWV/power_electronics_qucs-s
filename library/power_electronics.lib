@@ -1,0 +1,118 @@
+<Qucs Library 24.2.1 "power_electronics">
+
+<Component ideal_diode>
+  <Description>
+ideal diode with forward voltage
+  </Description>
+  <Model>
+.Def:power_electronics_ideal_diode _net0 _net2 Vth="0.7"
+Vdc:V1 _net1 _net2 U="Vth"
+Relais:S1 _net0 _net0 _net1 _net1 Vt="0 V" Vh="0 V" Ron="1e-4" Roff="1e7" Temp="26.85"
+C:C1 _net2 _net0 C="1 nF" V=""
+.Def:End
+  </Model>
+  <Spice>* Qucs 24.2.1  power_electronics_ideal_diode.sch
+
+.SUBCKT power_electronics_ideal_diode  gnd _net0 _net2 Vth=0.7 
+V1 _net1 _net2 DC {VTH}
+S1 _net0 _net1 _net0 _net1 MOD_S1 OFF
+.MODEL  MOD_S1 sw vt=0 vh=0 ron=1E-4 roff=1E7 
+C1 _net2 _net0  1N 
+.ENDS
+  </Spice>
+  <Symbol>
+    <.PortSym -30 0 1 180>
+    <.PortSym 40 0 2 0>
+    <Line -30 0 70 0 #00007f 2 1>
+    <Line -10 -10 0 20 #00007f 2 1>
+    <Line 10 0 -20 10 #00007f 2 1>
+    <Line -10 -10 20 10 #00007f 2 1>
+    <Line 10 -10 0 0 #000000 1 1>
+    <Line 10 10 0 -20 #00007f 2 1>
+    <.ID -20 14 D "1=Vth=0.7=Diode Forward Voltage=">
+  </Symbol>
+</Component>
+
+<Component ideal_switch>
+  <Description>
+ideal switch with freewheeling diode
+  </Description>
+  <Model>
+.Def:power_electronics_ideal_switch _net2 _net1 _net0 Vth="0.7"
+Relais:S1 _net0 _net2 _net1 gnd Vt="0.5 V" Vh="0.0 V" Ron="0.1e-3" Roff="1e7" Temp="26.85"
+Sub:SUB1 _net1 _net2 Type="ideal_diode" Vth="0.7"
+.Def:End
+  </Model>
+  <ModelIncludes "ideal_diode.sch.lst">
+  <Spice>* Qucs 24.2.1  power_electronics_ideal_switch.sch
+* Qucs 24.2.1  D:/Repos/GitHub/powerelectronics_lib_qucs-s/ideal_diode.sch
+.SUBCKT ideal_diode _net0 _net2 Vth=0.7 
+V1 _net1 _net2 DC {VTH}
+S1 _net0 _net1 _net0 _net1 MOD_S1 OFF
+.MODEL  MOD_S1 sw vt=0 vh=0 ron=1E-4 roff=1E7 
+C1 _net2 _net0  1N 
+.ENDS
+
+.SUBCKT power_electronics_ideal_switch  gnd _net2 _net1 _net0 Vth=0.7 
+S1 _net2 _net1 _net0 0 MOD_S1 OFF
+.MODEL  MOD_S1 sw vt=0.5 vh=0 ron=0.1E-3 roff=1E7 
+XSUB1 _net1 _net2 ideal_diode Vth=0.7
+.ENDS
+  </Spice>
+  <Symbol>
+    <Line 30 0 -20 0 #00007f 2 1>
+    <Line 10 0 -27 -11 #00007f 2 1>
+    <Line -40 0 23 0 #00007f 2 1>
+    <Line 0 -30 0 26 #00007f 2 2>
+    <Line -24 0 0 16 #00007f 2 1>
+    <Line 15 16 0 -16 #00007f 2 1>
+    <Line -24 16 39 0 #00007f 2 1>
+    <Line 1 16 -7 -5 #00007f 2 1>
+    <Line -6 21 0 -10 #00007f 2 1>
+    <Line 1 11 0 10 #00007f 2 1>
+    <Line -6 21 7 -5 #00007f 2 1>
+    <Ellipse 16 -1 -2 2 #000000 1 1 #00007f 1 1>
+    <Ellipse -23 -1 -2 2 #000000 1 1 #00007f 1 1>
+    <Ellipse 12 -2 -4 4 #00007f 2 1 #c0c0c0 1 0>
+    <Ellipse -15 -2 -4 4 #00007f 2 1 #c0c0c0 1 0>
+    <.PortSym 0 -30 3 0>
+    <.ID -38 23 S "0=Vth=0.7=Diode Forward Voltage=">
+    <.PortSym -41 0 2 180>
+    <.PortSym 30 0 1 0>
+  </Symbol>
+</Component>
+
+<Component triangular_voltage>
+  <Description>
+triangular wave
+  </Description>
+  <Model>
+.Def:power_electronics_triangular_voltage _net0 _net1 Tper="1e-3" tpos="1e-3" tneg="1e-3"
+Vrect:V1 _net0 _net1 U="1 V" TH="1 ns" TL="1 ns" Tr="tpos" Tf="tneg" Td="0 ns"
+Eqn:Eqn1 tr1="Tper*0.5" tf1="Tper*0.5" Export="no"
+.Def:End
+  </Model>
+  <Spice>* Qucs 24.2.1  power_electronics_triangular_voltage.sch
+
+.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 Tper=1e-3 tpos=1e-3 tneg=1e-3 
+.PARAM tr1=Tper*0.5
+.PARAM tf1=Tper*0.5
+V1 _net0 _net1 DC 0 PULSE( 0 1 0N {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
+.ENDS
+  </Spice>
+  <Symbol>
+    <Ellipse -12 -12 24 24 #00007f 2 1 #c0c0c0 1 0>
+    <Line -12 0 -18 0 #00007f 2 1>
+    <Line 12 0 18 0 #00007f 2 1>
+    <Line -5 0 11 4 #00007f 2 1>
+    <Line 6 4 -11 4 #00007f 2 1>
+    <Line 6 -4 -11 4 #00007f 2 1>
+    <Line -5 -8 11 4 #00007f 2 1>
+    <.PortSym -30 0 2 0>
+    <.PortSym 30 0 1 180>
+    <.ID -21 14 SUB1 "0=Tper=1e-3=Period=" "0=tpos=1e-3=Period=" "0=tneg=1e-3=Period=">
+    <Text -28 11 12 #0000ff 90 "-">
+    <Text 7 24 12 #ff0000 90 "+">
+  </Symbol>
+</Component>
+
