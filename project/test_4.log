@@ -1,0 +1,6 @@
+WARNING: unknown token in: "x<80.0[?]exp(x):exp(80)*(x-80)"
+LTspice 24.0.12 for Windows
+Circuit: * Qucs 24.2.1 D:/Repos/GitHub/power_electronics_qucs-s/project/test_4.sch
+Start Time: Tue Jul 23 19:39:11 2024
+Unknown model type "d_inverter" -- ignored
+Fatal Error: tran: Missing node(s).

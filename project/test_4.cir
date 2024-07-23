@@ -1,0 +1,18 @@
+* Qucs 24.2.1  D:/Repos/GitHub/power_electronics_qucs-s/project/test_4.sch
+.INCLUDE "C:/Program Files (x86)/Qucs-S/share/qucs-s/xspice_cmlib/include/ngspice_mathfunc.inc"
+V1 vi 0 DC 0 PULSE( 0 1 0N 1N 1N 0.0001 0.000200002 )  AC 0
+
+AY1 vi vo model_Y1
+.model model_Y1 d_buffer(rise_delay=1N fall_delay=1N input_load=5e-13)
+.model mydelay d_inverter(rise_delay=30U fall_delay=30U input_load=5e-13)
+
+.control
+
+tran 2.50125e-06 0.005 0  uic
+write spice4qucs.tr1.plot v(vi) v(vo)
+destroy all
+reset
+
+exit
+.endc
+.END

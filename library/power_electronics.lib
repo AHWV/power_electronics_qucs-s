@@ -84,19 +84,23 @@ XSUB1 _net1 _net2 ideal_diode Vth=0.7
 
 <Component triangular_voltage>
   <Description>
-triangular wave
+ideal triangular wave source
   </Description>
   <Model>
-.Def:power_electronics_triangular_voltage _net0 _net1 tpos="2e-3" tneg="2e-3"
-Vrect:V1 _net0 _net1 U="1 V" TH="tpos" TL="tneg" Tr="tpos" Tf="tneg" Td="0 ns"
-Eqn:Eqn1 tr1="Tper*0.5" tf1="Tper*0.5" Export="no"
+.Def:power_electronics_triangular_voltage _net0 _net1 vh="1" voff="0" tper="2e-3" duty="0.5" td="0"
+Eqn:Eqn1 tpos="tper*duty" tneg="tper*(1-duty)" vamp="vh*2" vdcoff="voff-1" Export="no"
+Vrect:V1 _net0 _net2 U="vamp" TH="tpos" TL="tneg" Tr="tpos" Tf="tneg" Td="td"
+Vdc:V1 _net2 _net1 U="vdcoff"
 .Def:End
   </Model>
   <Spice>* Qucs 24.2.1  power_electronics_triangular_voltage.sch
 
-.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 tpos=1e-3 tneg=1e-3 
-.PARAM TPER=tpos+tneg
-V1 _net0 _net1 DC 0 PULSE( 0 1 0N {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
+.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 Vh=1 Voff=0 tper=1e-3 duty=0.5 td=0
+.PARAM VDCO=VOFF
+.PARAM TPOS=TPER*DUTY
+.PARAM TNEG=TPER*(1-DUTY)
+V1 _net0 _net2 DC 0 PULSE( {-VH} {VH} {TD} {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
+V2 _net2 _net1 DC {VDCO}
 .ENDS
   </Spice>
   <Symbol>
@@ -109,9 +113,9 @@ V1 _net0 _net1 DC 0 PULSE( 0 1 0N {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
     <Line -5 -8 11 4 #00007f 2 1>
     <.PortSym -30 0 2 0>
     <.PortSym 30 0 1 180>
-    <.ID -21 14 SUB1 "0=tpos=1e-3=Period=" "0=tneg=1e-3=Period=">
+    <.ID -21 14 V "0=vh=2=Peak-to-peak voltage=" "0=voff=0=Offset DC voltage=" "0=tper=1e-3=Period=" "0=duty=0.5=duty cycle=" "0=td=0=Delay=">
     <Text -28 11 12 #0000ff 90 "-">
-    <Text 7 24 12 #ff0000 90 "+">
+    <Text 8 15 12 #ff0000 90 "+">
   </Symbol>
 </Component>
 

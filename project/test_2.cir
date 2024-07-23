@@ -1,0 +1,53 @@
+* Qucs 24.2.1  D:/Repos/GitHub/power_electronics_qucs-s/project/test_2.sch
+
+
+.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 Vh=1 Voff=0 tper=1e-3 duty=0.5 td=0
+.PARAM VDCO=VOFF
+.PARAM TPOS=TPER*DUTY
+.PARAM TNEG=TPER*(1-DUTY)
+V1 _net0 _net2 DC 0 PULSE( {-VH} {VH} {TD} {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
+V2 _net2 _net1 DC {VDCO}
+.ENDS
+  
+* Qucs 24.2.1  D:/Repos/GitHub/powerelectronics_lib_qucs-s/ideal_diode.sch
+.SUBCKT ideal_diode _net0 _net2 Vth=0.7 
+V1 _net1 _net2 DC {VTH}
+S1 _net0 _net1 _net0 _net1 MOD_S1 OFF
+.MODEL  MOD_S1 sw vt=0 vh=0 ron=1E-4 roff=1E7 
+C1 _net2 _net0  1N 
+.ENDS
+* Qucs 24.2.1  E:/Repos/GitHub/power_electronics_qucs-s/subcircuit/ideal_switch.sch
+.SUBCKT ideal_switch _net2 _net1 _net0 Vth=0.7 
+S1 _net2 _net1 _net0 0 MOD_S1 OFF
+.MODEL  MOD_S1 sw vt=0.5 vh=0 ron=0.1E-3 roff=1E7 
+XSUB1 _net1 _net2 ideal_diode Vth=0.7
+.ENDS
+
+
+.SUBCKT power_electronics_ideal_comparator  gnd cp cm out1 
+B1 out1 gnd  V = V(cp)>V(cm) ? 1 : 0 
+.ENDS
+  
+.INCLUDE "C:/Program Files (x86)/Qucs-S/share/qucs-s/xspice_cmlib/include/ngspice_mathfunc.inc"
+V4 vgh 0 DC 0 PULSE( 0 1 0N 1N 1N 0.0005 0.001 )  AC 0
+V3 vgl 0 DC 0 PULSE( 0 1 0.5M 1N 1N 0.0005 0.001 )  AC 0
+V6 vref 0 DC 0
+XV5 0  vtri2 0 power_electronics_triangular_voltage vh=1 voff=0 tper=1E-3 duty=0.5 td=0
+XSUB2 vp 0 vgl ideal_switch Vth=0.7
+VPr1 _net0 0 DC 0
+R1 _net1 _net0  10 tc1=0.0 tc2=0.0 
+L1 vp _net1  10M 
+XSUB1 vs vp vgh ideal_switch Vth=0.7
+V1 vs 0 DC 100
+XX1 0  vref vtri2 vo power_electronics_ideal_comparator
+
+.control
+
+tran 4.0004e-06 0.04 0  uic
+write spice4qucs.tr1.plot i(VPr1) v(vgh) v(vgl) v(vo) v(vp) v(vref) v(vs) v(vtri2)
+destroy all
+reset
+
+exit
+.endc
+.END
