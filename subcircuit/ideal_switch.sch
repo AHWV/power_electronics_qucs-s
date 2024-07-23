@@ -1,6 +1,6 @@
 <Qucs Schematic 24.2.1>
 <Properties>
-  <View=383,232,917,531,2.97659,0,0>
+  <View=391,232,924,531,4.1806,0,0>
   <Grid=1,1,1>
   <DataSet=ideal_switch.dat>
   <DataDisplay=ideal_switch.dpl>
@@ -31,8 +31,8 @@
   <Ellipse -15 -2 -4 4 #00007f 2 1 #c0c0c0 1 0>
   <.PortSym 0 -30 3 0>
   <.ID -38 23 S "0=Vth=0.7=Diode Forward Voltage=">
-  <.PortSym -41 0 2 180>
   <.PortSym 30 0 1 0>
+  <.PortSym -40 0 2 180>
 </Symbol>
 <Components>
   <Port sg 1 550 340 -23 12 0 0 "3" 1 "analog" 0 "v" 0 "" 0>
@@ -40,7 +40,7 @@
   <Port s 1 670 440 -23 12 0 0 "2" 1 "analog" 0 "v" 0 "" 0>
   <Port d 1 660 280 -23 12 0 0 "1" 1 "analog" 0 "v" 0 "" 0>
   <Relais S1 1 640 370 49 -26 0 0 "0.5 V" 0 "0.0 V" 0 "0.1e-3" 0 "1e7" 0 "26.85" 0>
-  <Sub SUB1 1 737 329 18 -36 0 1 "D:/Repos/GitHub/powerelectronics_lib_qucs-s/ideal_diode.sch" 0 "0.7" 0>
+  <Sub SUB1 1 737 329 18 -36 0 1 "./ideal_diode.sch" 0 "0.7" 0>
 </Components>
 <Wires>
   <550 340 610 340 "" 0 0 0 "">

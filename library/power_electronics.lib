@@ -87,16 +87,15 @@ XSUB1 _net1 _net2 ideal_diode Vth=0.7
 triangular wave
   </Description>
   <Model>
-.Def:power_electronics_triangular_voltage _net0 _net1 Tper="1e-3" tpos="1e-3" tneg="1e-3"
-Vrect:V1 _net0 _net1 U="1 V" TH="1 ns" TL="1 ns" Tr="tpos" Tf="tneg" Td="0 ns"
+.Def:power_electronics_triangular_voltage _net0 _net1 tpos="2e-3" tneg="2e-3"
+Vrect:V1 _net0 _net1 U="1 V" TH="tpos" TL="tneg" Tr="tpos" Tf="tneg" Td="0 ns"
 Eqn:Eqn1 tr1="Tper*0.5" tf1="Tper*0.5" Export="no"
 .Def:End
   </Model>
   <Spice>* Qucs 24.2.1  power_electronics_triangular_voltage.sch
 
-.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 Tper=1e-3 tpos=1e-3 tneg=1e-3 
-.PARAM tr1=Tper*0.5
-.PARAM tf1=Tper*0.5
+.SUBCKT power_electronics_triangular_voltage  gnd _net0 _net1 tpos=1e-3 tneg=1e-3 
+.PARAM TPER=tpos+tneg
 V1 _net0 _net1 DC 0 PULSE( 0 1 0N {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
 .ENDS
   </Spice>
@@ -110,7 +109,7 @@ V1 _net0 _net1 DC 0 PULSE( 0 1 0N {TPOS} {TNEG} 1e-9 {TPER} )  AC 0
     <Line -5 -8 11 4 #00007f 2 1>
     <.PortSym -30 0 2 0>
     <.PortSym 30 0 1 180>
-    <.ID -21 14 SUB1 "0=Tper=1e-3=Period=" "0=tpos=1e-3=Period=" "0=tneg=1e-3=Period=">
+    <.ID -21 14 SUB1 "0=tpos=1e-3=Period=" "0=tneg=1e-3=Period=">
     <Text -28 11 12 #0000ff 90 "-">
     <Text 7 24 12 #ff0000 90 "+">
   </Symbol>

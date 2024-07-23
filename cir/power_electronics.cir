@@ -1,0 +1,18 @@
+.subckt ideal_diode a k Vf=0.7
+* Subcircuit Body
+	s1 a ki a ki mysw
+	c1 a k 0.1n
+	vdiode ki k {Vf}
+	.model mysw sw vt=0 vh=0 ron=1e-3 roff=1e7
+.ends name
+
+.subckt ideal_sw_fwd d s gd Vf=0.0 Vs=0.0
+* Subcircuit Body
+	s1 d si gd gnd myswt off
+	s2 sii d sii d myswd off
+	c1 d si 1n
+	vdiode s sii {Vf}
+	vsw si s {Vs}
+	.model myswt sw vt=0.5 vh=0 ron=1e-3 roff=1e7
+	.model myswd sw vt=0 vh=0 ron=1e-3 roff=1e7
+.ends name
