@@ -1,18 +1,21 @@
-* Qucs 24.2.1  D:/Repos/GitHub/power_electronics_qucs-s/project/test_4.sch
-.INCLUDE "C:/Program Files (x86)/Qucs-S/share/qucs-s/xspice_cmlib/include/ngspice_mathfunc.inc"
-V1 vi 0 DC 0 PULSE( 0 1 0N 1N 1N 0.0001 0.000200002 )  AC 0
-
-AY1 vi vo model_Y1
-.model model_Y1 d_buffer(rise_delay=1N fall_delay=1N input_load=5e-13)
-.model mydelay d_inverter(rise_delay=30U fall_delay=30U input_load=5e-13)
-
+* Qucs 24.2.1  E:/Repos/GitHub/power_electronics_qucs-s/project/test_4.sch
+* .INCLUDE "C:/Program Files (x86)/Qucs-S/share/qucs-s/xspice_cmlib/include/ngspice_mathfunc.inc"
+V1 vi 0 DC 0 PULSE( 0 5 0N 1N 1N 1e-07 2.02e-07 )  AC 0
+abridge2 [vi] [vo2] adc_buff
+.model adc_buff adc_bridge(in_low = 0.3 in_high = 3.5)
+AY1 vo2 vo model_Y1
+.model model_Y1 d_buffer(rise_delay=20n fall_delay=0 input_load=5e-13)
+abridge1 [vo] [voa] dac1
+.model dac1 dac_bridge(out_low= 0.0 out_high = 5 out_undef =2.2  input_load= 5.0e-12 t_rise =1N  t_fall= 1N)
 .control
 
-tran 2.50125e-06 0.005 0  uic
-write spice4qucs.tr1.plot v(vi) v(vo)
-destroy all
-reset
+tran 1.0002e-09 5e-06 0 
+* write spice4qucs.tr1.plot v(vi) v(vo)
+* destroy all
+* reset
 
-exit
+plot v(vi) v(voa)
+
+* exit
 .endc
 .END

@@ -1,6 +1,6 @@
 <Qucs Schematic 24.2.1>
 <Properties>
-  <View=-138,129,2155,1007,1.22846,269,44>
+  <View=-2630,-1868,2290,4426,0.693433,1879,1211>
   <Grid=10,10,1>
   <DataSet=test_4.dat>
   <DataDisplay=test_4.dpl>
@@ -16,10 +16,11 @@
 <Symbol>
 </Symbol>
 <Components>
-  <Vrect V1 1 420 360 18 -26 0 1 "1 V" 1 "0.1 ms" 1 "0.1 ms" 1 "1 ns" 0 "1 ns" 0 "0 ns" 0 "0 V" 1>
+  <Vrect V1 1 420 360 18 -26 0 1 "1 V" 1 "0.1 us" 1 "0.1 us" 1 "1 ns" 0 "1 ns" 0 "0 ns" 0 "0 V" 1>
   <GND * 1 420 390 0 0 0 0>
-  <.TR TR1 1 780 190 0 68 0 0 "lin" 1 "0" 1 "5 ms" 1 "2000" 0 "Trapezoidal" 0 "2" 0 "1 ns" 0 "1e-16" 0 "150" 0 "0.001" 0 "1 pA" 0 "1 uV" 0 "26.85" 0 "1e-3" 0 "1e-6" 0 "1" 0 "CroutLU" 0 "no" 0 "no" 0 "0" 0>
-  <Buf Y1 1 600 320 -26 27 0 0 "1 V" 0 "20 us" 0 "10" 0 "old" 0>
+  <.TR TR1 1 780 190 0 86 0 0 "lin" 1 "0" 1 "5 us" 1 "5000" 1 "Trapezoidal" 0 "2" 0 "1 ns" 0 "1e-16" 0 "150" 0 "0.001" 0 "1 pA" 0 "1 uV" 0 "26.85" 0 "1e-3" 0 "1e-6" 0 "1" 0 "CroutLU" 0 "no" 0 "yes" 0 "0" 0>
+  <Buf Y1 1 600 320 -26 27 0 0 "1 V" 0 "10 ns" 0 "90" 0 "old" 0>
+  <SPICEINIT SPICEINIT1 1 449 41 -32 18 0 0 "codemodel ../lib/ngspice/digital.cm" 1>
 </Components>
 <Wires>
   <420 320 420 330 "" 0 0 0 "">
